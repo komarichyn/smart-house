@@ -1,0 +1,16 @@
+{
+  "errorMap": {},
+  "content": [
+    {
+      "id": 1,
+      "name": "first",
+      "outcome": "first/outcome",
+      "income": "first/income"
+    }
+  ],
+  "pagination": {
+    "page": 0,
+    "size": 10,
+    "total": 1
+  }
+}

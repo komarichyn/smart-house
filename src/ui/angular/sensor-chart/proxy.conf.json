@@ -1,0 +1,7 @@
+{
+  "/api": {
+    "target": "/sensor-service/sensor/",
+    "secure": false,
+    "logLevel": "debug"
+  }
+}
