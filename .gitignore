@@ -40,3 +40,8 @@ out/
 
 ### VS Code ###
 .vscode/
+
+/src/ui/angular/node_modules
+/src/ui/angular/sensor-chart/node_modules
+/src/ui/angular/sensor-chart/.angular
+
