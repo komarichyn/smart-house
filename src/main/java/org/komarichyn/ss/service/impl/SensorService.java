@@ -1,4 +1,4 @@
-package org.komarichyn.ss.service;
+package org.komarichyn.ss.service.impl;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -14,6 +14,7 @@ import org.komarichyn.ss.database.sql.ISensorDataRepository;
 import org.komarichyn.ss.database.sql.ISensorRepository;
 import org.komarichyn.ss.database.sql.entity.Sensor;
 import org.komarichyn.ss.database.sql.entity.SensorData;
+import org.komarichyn.ss.service.ISensorService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
