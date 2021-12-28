@@ -5,9 +5,12 @@ import org.komarichyn.ss.api.dto.SensorDto;
 
 public interface IDeviceRegistrationService {
 
-  public boolean isActivated(IDevice device);
-  public IDevice activate(IDevice device);
-  public IDevice deactivate(IDevice device);
-  public SensorDto registration(IDevice device);
+  boolean isActivated(IDevice device);
+
+  IDevice activate(IDevice device);
+
+  IDevice deactivate(IDevice device);
+
+  SensorDto registration(IDevice device);
 
 }

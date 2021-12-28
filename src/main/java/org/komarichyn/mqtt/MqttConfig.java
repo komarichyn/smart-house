@@ -5,11 +5,13 @@ import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.stereotype.Component;
 
-@Component
+@Configuration
+@ComponentScan(basePackages = "org.komarichyn.mqtt")
 @Setter
 @Getter
 @Slf4j
@@ -21,37 +23,37 @@ public class MqttConfig {
   /**
    * User name
    */
-  @Value("mqtt.username")
+  @Value("${mqtt.username}")
   private String username;
   /**
    * Password
    */
-  @Value("mqtt.password")
+  @Value("${mqtt.password}")
   private String password;
   /**
    * Connection address
    */
-  @Value("mqtt.hostUrl")
+  @Value("${mqtt.hostUrl}")
   private String hostUrl;
   /**
    * Customer Id
    */
-  @Value("mqtt.clientID")
+  @Value("${mqtt.clientID}")
   private String clientID;
   /**
    * Default connection topic
    */
-  @Value("mqtt.default-topic")
+  @Value("${mqtt.default-topic}")
   private String defaultTopic;
   /**
    * Timeout time
    */
-  @Value("mqtt.timeout")
+  @Value("${mqtt.timeout}")
   private int timeout;
   /**
    * Keep connected
    */
-  @Value("mqtt.keepalive")
+  @Value("${mqtt.keepalive}")
   private int keepalive;
 
   @Bean
@@ -63,7 +65,7 @@ public class MqttConfig {
     log.info("timeout: {}", timeout);
     log.info("keepalive: {}", keepalive);
     mqttPushClient.connect(hostUrl, clientID, username, password, timeout, keepalive);
-    // End with / / to subscribe to all topics starting with test
+    // End with /
     mqttPushClient.subscribe(defaultTopic, 0);
     return mqttPushClient;
   }

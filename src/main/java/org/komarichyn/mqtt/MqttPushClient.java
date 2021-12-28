@@ -54,10 +54,10 @@ public class MqttPushClient {
         client.setCallback(pushCallback);
         client.connect(options);
       } catch (Exception e) {
-        e.printStackTrace();
+        log.error(e.getMessage(), e);
       }
     } catch (Exception e) {
-      e.printStackTrace();
+      log.error(e.getMessage(), e);
     }
   }
 
@@ -79,15 +79,17 @@ public class MqttPushClient {
     MqttTopic mTopic = MqttPushClient.getClient().getTopic(topic);
     if (null == mTopic) {
       log.error("topic not exist");
+      return;
     }
     MqttDeliveryToken token;
     try {
       token = mTopic.publish(message);
       token.waitForCompletion();
     } catch (MqttPersistenceException e) {
-      e.printStackTrace();
+      log.error("some issue with persistence");
+      log.error(e.getMessage(), e);
     } catch (MqttException e) {
-      e.printStackTrace();
+      log.error(e.getMessage(), e);
     }
   }
 
@@ -102,7 +104,7 @@ public class MqttPushClient {
     try {
       MqttPushClient.getClient().subscribe(topic, qos);
     } catch (MqttException e) {
-      e.printStackTrace();
+      log.error(e.getMessage(), e);
     }
   }
 
