@@ -9,9 +9,6 @@ public class IMQTTService {
 
   public static String DEFAULT_TOPIC = "welcome";
 
-  @Autowired
-  private MqttPushClient mqttPushClient;
-
 
 
 

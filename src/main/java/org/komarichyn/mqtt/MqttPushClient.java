@@ -17,7 +17,7 @@ import org.springframework.stereotype.Component;
 public class MqttPushClient {
 
   @Autowired
-  private PushCallback pushCallback;
+  private WelcomeTopicCallback welcomeTopicCallback;
 
   private static MqttClient client;
 
@@ -49,9 +49,10 @@ public class MqttPushClient {
       options.setPassword(password.toCharArray());
       options.setConnectionTimeout(timeout);
       options.setKeepAliveInterval(keepalive);
+      options.setAutomaticReconnect(true);
       MqttPushClient.setClient(client);
       try {
-        client.setCallback(pushCallback);
+        client.setCallback(welcomeTopicCallback);
         client.connect(options);
       } catch (Exception e) {
         log.error(e.getMessage(), e);

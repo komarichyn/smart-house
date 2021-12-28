@@ -1,10 +1,7 @@
 package org.komarichyn.ss.service.impl;
 
-import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 import lombok.extern.slf4j.Slf4j;
 import org.komarichyn.ss.api.dto.BaseDto;
 import org.komarichyn.ss.api.dto.PagingDto;
@@ -15,11 +12,10 @@ import org.komarichyn.ss.database.sql.ISensorRepository;
 import org.komarichyn.ss.database.sql.entity.Sensor;
 import org.komarichyn.ss.database.sql.entity.SensorData;
 import org.komarichyn.ss.service.ISensorService;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -30,6 +26,8 @@ public class SensorService implements ISensorService {
   private ISensorRepository sensorRepository;
   @Autowired
   private ISensorDataRepository sensorDataRepository;
+  @Autowired
+  private ModelMapper modelMapper;
 
 
   @Override
@@ -68,6 +66,16 @@ public class SensorService implements ISensorService {
   public BaseDto<SensorDto> getSensorById(Long id) {
     log.debug("get sensor by id: {} ", id);
     BaseDto<SensorDto> result = new BaseDto<>();
+    SensorDto dto = this.getSensor(id);
+    if(dto != null){
+      result.setContent(dto);
+    }
+    log.debug("result: {}", result);
+    return result;
+  }
+
+  @Override
+  public SensorDto getSensor(Long id) {
     Optional<Sensor> s = sensorRepository.findById(id);
     if(s.isPresent()){
       Sensor sensor = s.get();
@@ -76,9 +84,30 @@ public class SensorService implements ISensorService {
       dto.setOutcome(sensor.getOutcome());
       dto.setIncome(sensor.getIncome());
       dto.setId(sensor.getId());
-      result.setContent(dto);
+      return dto;
     }
+    return null;
+  }
+
+  @Override
+  public SensorDto getSensor(String code){
+    log.debug("get sensor by name: {}", code);
+    Sensor s = sensorRepository.findByName(code);
+    if(s == null){
+      return null;
+    }
+    SensorDto result = modelMapper.map(s, SensorDto.class);
     log.debug("result: {}", result);
     return result;
+  }
+
+  @Override
+  public SensorDto save(SensorDto sensor) {
+    log.debug("save new sensor: {}", sensor);
+    Sensor s = modelMapper.map(sensor, Sensor.class);
+    sensorRepository.save(s);
+    sensor = modelMapper.map(s, SensorDto.class);
+    log.debug("result: {}", sensor);
+    return sensor;
   }
 }

@@ -5,4 +5,5 @@ import java.io.Serializable;
 public interface IDevice extends Serializable {
   String getCode();
   SensorDto getSensor();
+  void setSensor(SensorDto sensor);
 }

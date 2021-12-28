@@ -28,7 +28,7 @@ public class DeviceRegistrationService implements IDeviceRegistrationService {
   public boolean isActivated(IDevice device) {
     String deviceCode = device.getCode();
     RegistrationInfo registrationInfo = registrationRepository.findByCode(deviceCode);
-    if(registrationInfo == null){
+    if (registrationInfo == null) {
       log.debug("device not found by code: {}", deviceCode);
       return false;
     }
@@ -39,13 +39,13 @@ public class DeviceRegistrationService implements IDeviceRegistrationService {
   public IDevice activate(IDevice device) {
     String deviceCode = device.getCode();
     RegistrationInfo registrationInfo = registrationRepository.findByCode(deviceCode);
-    if(registrationInfo == null){
+    if (registrationInfo == null) {
       log.debug("device not found by code: {}", deviceCode);
       return null;
     }
-    if(registrationInfo.isActive()){
+    if (registrationInfo.isActive()) {
       log.warn("device with code :{} already active", deviceCode);
-    }else{
+    } else {
       registrationInfo.setActive(Boolean.TRUE);
       registrationInfo = registrationRepository.save(registrationInfo);
     }
@@ -61,14 +61,14 @@ public class DeviceRegistrationService implements IDeviceRegistrationService {
   public IDevice deactivate(IDevice device) {
     String deviceCode = device.getCode();
     RegistrationInfo registrationInfo = registrationRepository.findByCode(deviceCode);
-    if(registrationInfo == null){
+    if (registrationInfo == null) {
       log.debug("device not found by code: {}", deviceCode);
       return null;
     }
-    if(registrationInfo.isActive()){
+    if (registrationInfo.isActive()) {
       registrationInfo.setActive(Boolean.FALSE);
       registrationInfo = registrationRepository.save(registrationInfo);
-    }else{
+    } else {
       log.warn("device with code :{} already deactivated", deviceCode);
     }
 
@@ -84,31 +84,35 @@ public class DeviceRegistrationService implements IDeviceRegistrationService {
     String deviceCode = device.getCode();
     RegistrationInfo registrationInfo = registrationRepository.findByCode(deviceCode);
 
-    if(registrationInfo == null) {
+    if (registrationInfo == null) {
       registrationInfo = new RegistrationInfo();
       registrationInfo.setCode(deviceCode);
+      Sensor s = new Sensor();
+      s.setId(device.getSensor().getId());
+      registrationInfo.setSensor(s);
 
-      if (device instanceof IPassiveDevice) {
-        registrationInfo.setActive(Boolean.FALSE);
-      }
-      if (device instanceof IActiveDevice) {
-        registrationInfo.setActive(Boolean.TRUE);
-      }
+//      if (device instanceof IPassiveDevice) {
+//        registrationInfo.setActive(Boolean.FALSE);
+//      }
+//      if (device instanceof IActiveDevice) {
+//        registrationInfo.setActive(Boolean.TRUE);
+//      }
       registrationInfo = registrationRepository.save(registrationInfo);
       log.debug("new device:{} was saved", registrationInfo);
       return null;
     }
 
-    if(registrationInfo.getSensor() != null){
-      Sensor sensor = registrationInfo.getSensor();
-      SensorDto dto = modelMapper.map(sensor, SensorDto.class);
-      log.debug("got configuration {} for device: {} ", dto, registrationInfo);
-      return dto;
+    if (!registrationInfo.isRegistered()) {
+      return null;
     }
-    return null;
+
+    Sensor sensor = registrationInfo.getSensor();
+    SensorDto dto = modelMapper.map(sensor, SensorDto.class);
+    log.debug("got configuration {} for device: {} ", dto, registrationInfo);
+    return dto;
   }
 
-  private DeviceDto convert(RegistrationInfo registrationInfo){
+  private DeviceDto convert(RegistrationInfo registrationInfo) {
     return modelMapper.map(registrationInfo, DeviceDto.class);
   }
 }
