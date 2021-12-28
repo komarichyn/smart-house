@@ -47,3 +47,5 @@ out/
 
 /src/ui/angular/sensor-chart/dist/
 /dump/
+/env/config/mariadb/data/
+/target/
