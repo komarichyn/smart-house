@@ -8,4 +8,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface ISensorRepository extends PagingAndSortingRepository<Sensor, Long> {
 
+  Sensor findByName(String name);
+
 }

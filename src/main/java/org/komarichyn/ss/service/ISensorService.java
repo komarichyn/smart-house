@@ -12,4 +12,10 @@ public interface ISensorService {
   BaseDto<List<SensorDataDto>> listData(Long sensorId, Pageable paging);
 
   BaseDto<SensorDto> getSensorById(Long id);
+
+  SensorDto getSensor(Long id);
+
+  SensorDto getSensor(String code);
+
+  SensorDto save(SensorDto sensor);
 }

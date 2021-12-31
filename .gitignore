@@ -46,3 +46,7 @@ out/
 /src/ui/angular/sensor-chart/.angular
 
 /src/ui/angular/sensor-chart/dist/
+/dump/
+/env/config/mariadb/data/
+/target/
+/env/config/mosquitto/log/

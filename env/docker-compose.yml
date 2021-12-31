@@ -1,0 +1,34 @@
+version: '3.5'
+
+services:
+  mosquitto:
+    container_name: ss-mosquitto
+    image: eclipse-mosquitto:latest
+    volumes:
+      - ./config/mosquitto/config:/mosquitto/config/
+      - ./config/mosquitto/log:/mosquitto/log/
+    ports:
+      - '1883:1883'
+      - '9001:9001'
+    networks:
+      - default
+    restart: unless-stopped
+
+  mariadb:
+    container_name: ss-mariadb
+    image: mariadb:latest
+    ports:
+      - '3306:3306'
+    environment:
+      MARIADB_ALLOW_EMPTY_ROOT_PASSWORD: true
+      MARIADB_ROOT_PASSWORD: "${mariadb_password}"
+      MARIADB_ROOT_USERNAME: "${mariadb_username}"
+    networks:
+      - default
+    restart: on-failure
+    volumes:
+      - ./config/mariadb/data:/var/lib/mysql
+      - ./config/mariadb/conf:/etc/mysql
+
+networks:
+  default:
