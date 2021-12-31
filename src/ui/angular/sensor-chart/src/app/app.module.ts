@@ -9,12 +9,14 @@ import { AppComponent } from './app.component';
 import { ChartComponent } from './component/chart/chart.component';
 import {DatePipe} from "@angular/common";
 import { DashboardComponent } from './component/dashboard/dashboard.component';
+import { OverviewComponent as DeviceOverviewComponent } from './component/device/overview/overview.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     ChartComponent,
-    DashboardComponent
+    DashboardComponent,
+    DeviceOverviewComponent
   ],
   imports: [
     BrowserModule,

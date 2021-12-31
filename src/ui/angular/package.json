@@ -1,6 +1,6 @@
 {
   "dependencies": {
-    "@angular/cli": "^13.0.4"
+    "@angular/cli": "~13.1.2"
   },
   "name": "angular",
   "version": "1.0.0",
