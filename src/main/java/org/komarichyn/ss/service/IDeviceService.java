@@ -2,9 +2,12 @@ package org.komarichyn.ss.service;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import java.util.List;
+import org.komarichyn.ss.api.dto.BaseDto;
 import org.komarichyn.ss.api.dto.DeviceDto;
 import org.komarichyn.ss.api.dto.IDevice;
 import org.komarichyn.ss.api.dto.SensorDto;
+import org.springframework.data.domain.Pageable;
 
 public interface IDeviceService {
 

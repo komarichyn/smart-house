@@ -1,14 +1,21 @@
 package org.komarichyn.ss.service.impl;
 
+import java.text.SimpleDateFormat;
+import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import lombok.extern.slf4j.Slf4j;
 import org.komarichyn.ss.api.dto.BaseDto;
+import org.komarichyn.ss.api.dto.DeviceDto;
+import org.komarichyn.ss.api.dto.DeviceInfoDto;
 import org.komarichyn.ss.api.dto.PagingDto;
 import org.komarichyn.ss.api.dto.SensorDataDto;
 import org.komarichyn.ss.api.dto.SensorDto;
+import org.komarichyn.ss.database.sql.IRegistrationRepository;
 import org.komarichyn.ss.database.sql.ISensorDataRepository;
 import org.komarichyn.ss.database.sql.ISensorRepository;
+import org.komarichyn.ss.database.sql.entity.RegistrationInfo;
 import org.komarichyn.ss.database.sql.entity.Sensor;
 import org.komarichyn.ss.database.sql.entity.SensorData;
 import org.komarichyn.ss.service.ISensorService;
@@ -26,6 +33,8 @@ public class SensorService implements ISensorService {
   private ISensorRepository sensorRepository;
   @Autowired
   private ISensorDataRepository sensorDataRepository;
+  @Autowired
+  private IRegistrationRepository registrationRepository;
   @Autowired
   private ModelMapper modelMapper;
 
@@ -53,7 +62,7 @@ public class SensorService implements ISensorService {
     Optional<Sensor> optionalSensor = sensorRepository.findById(sensorId);
     if(optionalSensor.isPresent()){
       Page<SensorData> pagedResult = sensorDataRepository.findAllBySensorOrderByCreatedDesc(optionalSensor.get(), paging);
-      List<SensorDataDto> r = pagedResult.getContent().stream().map(el -> new SensorDataDto(el.getId(), el.getType(), el.getValue(), el.getCreated())).toList();
+      List<SensorDataDto> r = pagedResult.getContent().stream().map(el -> new SensorDataDto(el.getId(), el.getType(), el.getValue(), el.getCreated().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME))).toList();
         PagingDto p = PagingDto.builder().page(pagedResult.getNumber()).size(pagedResult.getSize()).total(pagedResult.getTotalElements()).build();
       result.setPagination(p);
       result.setContent(r);
@@ -109,5 +118,27 @@ public class SensorService implements ISensorService {
     sensor = modelMapper.map(s, SensorDto.class);
     log.debug("result: {}", sensor);
     return sensor;
+  }
+
+  @Override
+  public BaseDto<List<DeviceInfoDto>> listDevices(Pageable paging) {
+    Iterable<RegistrationInfo> regInfo = registrationRepository.findAll();
+    List<DeviceInfoDto> deviceDtos = new ArrayList<>();
+    regInfo.forEach(ri -> {
+      DeviceInfoDto dto = new DeviceInfoDto();
+      Sensor s = ri.getSensor();
+      dto.setCode(ri.getCode());
+      dto.setId(ri.getId());
+      dto.setActive(ri.isActive());
+      dto.setRegistered(ri.isRegistered());
+      dto.setName(s.getName());
+      dto.setOutcome(s.getOutcome());
+      dto.setIncome(s.getIncome());
+      dto.setCreated(ri.getCreated().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME));
+      deviceDtos.add(dto);
+    });
+    BaseDto<List<DeviceInfoDto>> result = new BaseDto<>();
+    result.setContent(deviceDtos);
+    return result;
   }
 }
