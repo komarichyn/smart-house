@@ -1,0 +1,12 @@
+{
+  "errorMap": {},
+  "content": {
+    "id": 1,
+    "active":false,
+    "registered": false,
+    "name": "first",
+    "code" : "code1",
+    "outcome": "first/outcome",
+    "income": "first/income"
+  }
+}

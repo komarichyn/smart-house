@@ -4,14 +4,17 @@
 
 import {SensorService} from "../app/service/sensor.service";
 import {MockSensorService} from "../app/service/mock.sensor.service";
+import {DeviceService} from "../app/service/device.service";
+import {MockDeviceService} from "../app/service/mock.device.service";
 
 
 export const environment = {
   production: false,
   providers: [
-    { provide: SensorService, useClass: MockSensorService }
+    {provide: SensorService, useClass: MockSensorService},
+    {provide: DeviceService, useClass: MockDeviceService}
   ],
-  contextPath:"/"
+  contextPath: "/"
 };
 
 /*

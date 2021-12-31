@@ -3,7 +3,7 @@ import {Sensor, SensorData} from "../entity/sensor";
 import {Response} from "../entity/response";
 
 
-export interface IServiceService {
+export interface ISensor {
   /**
    * return list of available sensors
    */
@@ -17,7 +17,9 @@ export interface IServiceService {
 
   /**
    * return list records with data relates to sensor by id
-   * @param sensorId
+   * @param sensorId sensor identifier
+   * @param pageNo page number
+   * @param pageSize number of elements on the page
    */
-  getSensorData(sensorId: number): Observable<Response<SensorData[]>>;
+  getSensorData(sensorId: number, pageNo: number, pageSize:number ): Observable<Response<SensorData[]>>;
 }

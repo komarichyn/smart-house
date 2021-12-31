@@ -1,1 +1,27 @@
-<p>overview works!</p>
+<div>
+  <div class="row">
+    <div class="col-md-3">Name</div>
+    <div class="col-md-3">Code</div>
+    <div class="col-md-1">Active</div>
+    <div class="col-md-1">Registered</div>
+    <div class="col-md-2">In</div>
+    <div class="col-md-2">Out</div>
+  </div>
+
+  <div class="row" *ngFor="let device of devices">
+    <div class="col-md-3"><input type="text" class="form-control"  [value]="device.name" [(ngModel)]="device.name"></div>
+    <div class="col-md-3"> <input type="text" class="form-control" disabled="disable" value="{{device.code}}"></div>
+    <div class="col-md-1">
+      <div class="form-check">
+          <input type="checkbox" class="form-check-input" value="" [checked]="device.active" (change)="onchange(device.id)" [(ngModel)]="device.active">
+      </div>
+    </div>
+    <div class="col-md-1">
+      <div class="form-check">
+          <input type="checkbox" class="form-check-input" value="" [checked]="device.registered" (change)="onchange(device.id)" [(ngModel)]="device.registered">
+      </div>
+    </div>
+    <div class="col-md-2"><input type="text" class="form-control"  disabled="disable" [value]="device.income"></div>
+    <div class="col-md-2"><input type="text" class="form-control"  disabled="disable" [value]="device.outcome" ></div>
+  </div>
+</div>

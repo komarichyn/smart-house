@@ -7,12 +7,12 @@ import {Response} from "../entity/response";
 import { environment } from '../../environments/environment';
 
 
-import {IServiceService} from "./i-service.service";
+import {ISensor} from "./i-sensor";
 
 @Injectable({
   providedIn: 'root'
 })
-export class SensorService implements IServiceService{
+export class SensorService implements ISensor{
 
   contextPath:string = "/";
 

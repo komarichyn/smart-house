@@ -1,0 +1,46 @@
+{
+  "errorMap": {},
+  "content": [
+    {
+      "id": 1,
+      "active":false,
+      "registered": false,
+      "name": "first 1",
+      "code" : "code1",
+      "outcome": "first/outcome",
+      "income": "first/income"
+    },
+    {
+      "id": 2,
+      "active":false,
+      "registered": true,
+      "name": "second",
+      "code" : "code2",
+      "outcome": "first/outcome",
+      "income": "first/income"
+    },
+    {
+      "id": 3,
+      "active":true,
+      "registered": true,
+      "name": "third",
+      "code" : "code3",
+      "outcome": "first/outcome",
+      "income": "first/income"
+    },
+    {
+      "id": 4,
+      "active":true,
+      "registered": false,
+      "name": "fourth",
+      "code" : "code4",
+      "outcome": "first/outcome",
+      "income": "first/income"
+    }
+  ],
+  "pagination": {
+    "page": 0,
+    "size": 10,
+    "total": 4
+  }
+}

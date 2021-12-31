@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import {IServiceService} from "./i-service.service";
+import {ISensor} from "./i-sensor";
 import {Observable, of} from "rxjs";
 import {Sensor, SensorData} from "../entity/sensor";
 import {HttpClient} from "@angular/common/http";
@@ -14,20 +14,17 @@ import * as sensor from "../../mock/sensors/get.json";
 @Injectable({
   providedIn: 'root'
 })
-export class MockSensorService implements IServiceService{
+export class MockSensorService implements ISensor{
 
   sensorDataJson : Response<SensorData[]> = sensorsData;
   sensorListJson : Response<Sensor[]> = sensors;
   sensorJson : Response<Sensor> = sensor;
 
-
-  constructor(private httpClient: HttpClient) { }
-
   getSensor(id: number): Observable<Response<Sensor>> {
     return of(this.sensorJson);
   }
 
-  getSensorData(sensorId: number): Observable<Response<SensorData[]>> {
+  getSensorData(sensorId: number, pageNo: number = 0, pageSize:number = 5): Observable<Response<SensorData[]>> {
     return of(this.sensorDataJson);
   }
 

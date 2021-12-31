@@ -10,6 +10,7 @@ import { ChartComponent } from './component/chart/chart.component';
 import {DatePipe} from "@angular/common";
 import { DashboardComponent } from './component/dashboard/dashboard.component';
 import { OverviewComponent as DeviceOverviewComponent } from './component/device/overview/overview.component';
+import {FormsModule} from "@angular/forms";
 
 @NgModule({
   declarations: [
@@ -23,6 +24,7 @@ import { OverviewComponent as DeviceOverviewComponent } from './component/device
     AppRoutingModule,
     NgChartsModule,
     HttpClientModule,
+    FormsModule
   ],
   providers: [
     ...environment.providers,
