@@ -79,6 +79,33 @@ public class DeviceRegistrationService implements IDeviceRegistrationService {
     return result;
   }
 
+
+//    if(DEFAULT_TOPIC.equals(topic)){
+//      ObjectMapper mapper = new ObjectMapper();
+//      IDevice device = mapper.readValue(message.getPayload(), DeviceDto.class);
+//      SensorDto sensorDto = sensorService.getSensor(device.getCode());
+//
+//      if(sensorDto == null){
+//        sensorDto = new SensorDto();
+//        sensorDto.setName(device.getCode());
+//        sensorDto.setIncome("device/" + device.getCode() + "/income");
+//        sensorDto.setOutcome("device/" + device.getCode() + "/outcome");
+//        sensorDto = sensorService.save(sensorDto);
+//      }
+//
+//      device.setSensor(sensorDto);
+//      SensorDto config = registrationService.registration(device);
+//      log.debug("registration data:{}", config);
+//
+////      //todo send configuration to client and subscribe to proper topic
+////      if(config != null) {
+////        String data = mapper.writeValueAsString(config);
+////        log.debug("result data: {}", data);
+////        mqttConfig.getMqttPushClient().subscribe(config.getOutcome(), 0);
+////        mqttConfig.getMqttPushClient().publish(0, false, config.getIncome(), data);
+////      }
+//    }
+
   @Override
   public SensorDto registration(IDevice device) {
     String deviceCode = device.getCode();

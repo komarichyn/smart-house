@@ -49,3 +49,4 @@ out/
 /dump/
 /env/config/mariadb/data/
 /target/
+/env/config/mosquitto/log/
