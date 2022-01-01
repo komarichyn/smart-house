@@ -51,3 +51,4 @@ out/
 /target/
 /env/config/mosquitto/log/
 /src/main/resources/static/
+/sensor-service.log
