@@ -22,4 +22,6 @@ public interface ISensorService {
   SensorDto save(SensorDto sensor);
 
   BaseDto<List<DeviceInfoDto>> listDevices(Pageable paging);
+
+  BaseDto<DeviceInfoDto> updateDeviceInfo(DeviceInfoDto device);
 }

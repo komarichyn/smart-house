@@ -1,13 +1,13 @@
 package org.komarichyn.ss.service.impl;
 
-import java.text.SimpleDateFormat;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import lombok.extern.slf4j.Slf4j;
 import org.komarichyn.ss.api.dto.BaseDto;
-import org.komarichyn.ss.api.dto.DeviceDto;
 import org.komarichyn.ss.api.dto.DeviceInfoDto;
 import org.komarichyn.ss.api.dto.PagingDto;
 import org.komarichyn.ss.api.dto.SensorDataDto;
@@ -57,13 +57,14 @@ public class SensorService implements ISensorService {
   @Override
   public BaseDto<List<SensorDataDto>> listData(Long sensorId, Pageable paging) {
     log.debug("listData by sensorId:{} , page: {}", sensorId, paging);
-    BaseDto<List<SensorDataDto>> result =  new BaseDto<>();
+    BaseDto<List<SensorDataDto>> result = new BaseDto<>();
 
     Optional<Sensor> optionalSensor = sensorRepository.findById(sensorId);
-    if(optionalSensor.isPresent()){
+    if (optionalSensor.isPresent()) {
       Page<SensorData> pagedResult = sensorDataRepository.findAllBySensorOrderByCreatedDesc(optionalSensor.get(), paging);
-      List<SensorDataDto> r = pagedResult.getContent().stream().map(el -> new SensorDataDto(el.getId(), el.getType(), el.getValue(), el.getCreated().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME))).toList();
-        PagingDto p = PagingDto.builder().page(pagedResult.getNumber()).size(pagedResult.getSize()).total(pagedResult.getTotalElements()).build();
+      List<SensorDataDto> r = pagedResult.getContent().stream().map(el -> new SensorDataDto(el.getId(), el.getType(), el.getValue(), el.getCreated().format(DateTimeFormatter.ISO_LOCAL_DATE_TIME)))
+          .toList();
+      PagingDto p = PagingDto.builder().page(pagedResult.getNumber()).size(pagedResult.getSize()).total(pagedResult.getTotalElements()).build();
       result.setPagination(p);
       result.setContent(r);
     }
@@ -76,7 +77,7 @@ public class SensorService implements ISensorService {
     log.debug("get sensor by id: {} ", id);
     BaseDto<SensorDto> result = new BaseDto<>();
     SensorDto dto = this.getSensor(id);
-    if(dto != null){
+    if (dto != null) {
       result.setContent(dto);
     }
     log.debug("result: {}", result);
@@ -86,7 +87,7 @@ public class SensorService implements ISensorService {
   @Override
   public SensorDto getSensor(Long id) {
     Optional<Sensor> s = sensorRepository.findById(id);
-    if(s.isPresent()){
+    if (s.isPresent()) {
       Sensor sensor = s.get();
       SensorDto dto = new SensorDto();
       dto.setName(sensor.getName());
@@ -99,10 +100,10 @@ public class SensorService implements ISensorService {
   }
 
   @Override
-  public SensorDto getSensor(String code){
+  public SensorDto getSensor(String code) {
     log.debug("get sensor by name: {}", code);
     Sensor s = sensorRepository.findByName(code);
-    if(s == null){
+    if (s == null) {
       return null;
     }
     SensorDto result = modelMapper.map(s, SensorDto.class);
@@ -139,6 +140,29 @@ public class SensorService implements ISensorService {
     });
     BaseDto<List<DeviceInfoDto>> result = new BaseDto<>();
     result.setContent(deviceDtos);
+    return result;
+  }
+
+  @Override
+  public BaseDto<DeviceInfoDto> updateDeviceInfo(DeviceInfoDto device) {
+    Optional<RegistrationInfo> regInfo = registrationRepository.findById(device.getId());
+    BaseDto<DeviceInfoDto> result = new BaseDto<>();
+    if (regInfo.isPresent()) {
+      RegistrationInfo ri = regInfo.get();
+      ri.setRegistered(device.isRegistered());
+      ri.setActive(device.isActive());
+      Sensor s = ri.getSensor();
+      s.setName(device.getName());
+      s.setOutcome(device.getOutcome());
+      s.setIncome(device.getIncome());
+      sensorRepository.save(s);
+      registrationRepository.save(ri);
+      result.setContent(device);
+    } else {
+      Map<String, String> errors = new HashMap<>();
+      errors.put("ERROR_CODE", "could not find device");
+      result.setErrorMap(errors);
+    }
     return result;
   }
 }

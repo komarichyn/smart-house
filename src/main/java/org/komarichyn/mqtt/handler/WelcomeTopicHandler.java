@@ -80,7 +80,7 @@ public class WelcomeTopicHandler implements IMqttHandler {
 
       if (config != null) {
         try {
-          publisher.publish(sensorDto.getIncome(), device, 0);
+          publisher.publish(sensorDto.getIncome(), device.getSensor(), 0);
         } catch (MqttException e) {
           log.error(e.getMessage(), e);
         }
