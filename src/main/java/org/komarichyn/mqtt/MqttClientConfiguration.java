@@ -15,7 +15,7 @@ import org.springframework.context.annotation.Scope;
 
 @Slf4j
 @Configuration
-@ComponentScan(basePackages = "org.komarichyn.mqtt.v2")
+@ComponentScan(basePackages = "org.komarichyn.mqtt")
 public class MqttClientConfiguration {
 
   /**
@@ -55,7 +55,6 @@ public class MqttClientConfiguration {
   private int keepalive;
 
   @Bean
-  @Scope("prototype")
   public IMqttClient mqttClient(MqttConnectOptions options) throws MqttException {
     IMqttClient mqttClient = new MqttClient(this.hostUrl, this.clientID, new MemoryPersistence());
     log.info("new mqtt client was created");
@@ -69,7 +68,7 @@ public class MqttClientConfiguration {
     options.setCleanSession(true);
     options.setConnectionTimeout(100);
     options.setKeepAliveInterval(100);
-
+    log.info("configuration for mqtt:{}", options);
     return options;
   }
 
