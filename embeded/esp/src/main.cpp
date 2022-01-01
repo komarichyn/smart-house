@@ -85,6 +85,7 @@ void sendTemperatureAndHumidity(String topicForData){
     long time = millis();
     Serial.println("current time:" + String(time));
     Serial.println("lastRead:" + String(data.lastRead));
+    Serial.println("topic:" + topicForData);
     uint8_t readStatus = mySensor.readRawData();
     if (readStatus != AHT10_ERROR) {
         float temp = mySensor.readTemperature(AHT10_USE_READ_DATA);
@@ -203,8 +204,12 @@ void setup() {
         }
     }
 
+    Serial.println("subscribe to :" + incomeTopic);
     mqttClient.subscribe(incomeTopic.c_str());
+    mqttClient.loop();
+    Serial.println("start registration");
     registration();
+    Serial.println("end registration");
 }
 
 
