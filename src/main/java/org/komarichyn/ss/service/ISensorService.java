@@ -6,6 +6,7 @@ import org.komarichyn.ss.api.dto.DeviceDto;
 import org.komarichyn.ss.api.dto.DeviceInfoDto;
 import org.komarichyn.ss.api.dto.SensorDataDto;
 import org.komarichyn.ss.api.dto.SensorDto;
+import org.komarichyn.ss.database.sql.entity.Sensor;
 import org.springframework.data.domain.Pageable;
 
 public interface ISensorService {
@@ -18,6 +19,8 @@ public interface ISensorService {
   SensorDto getSensor(Long id);
 
   SensorDto getSensor(String code);
+
+  Sensor findSensor(String code);
 
   SensorDto save(SensorDto sensor);
 

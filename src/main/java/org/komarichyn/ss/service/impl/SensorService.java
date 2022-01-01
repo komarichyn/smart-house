@@ -112,6 +112,17 @@ public class SensorService implements ISensorService {
   }
 
   @Override
+  public Sensor findSensor(String code) {
+    log.debug("find sensor by code: {}", code);
+    Sensor s = sensorRepository.findByName(code);
+    if (s == null) {
+      return null;
+    }
+    log.debug("result: {}", s);
+    return s;
+  }
+
+  @Override
   public SensorDto save(SensorDto sensor) {
     log.debug("save new sensor: {}", sensor);
     Sensor s = modelMapper.map(sensor, Sensor.class);

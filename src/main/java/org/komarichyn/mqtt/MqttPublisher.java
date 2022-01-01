@@ -40,7 +40,7 @@ public class MqttPublisher {
     log.debug("publish message:{} to topic: {} with qos:{}", message, topic, qos);
     MqttMessage mqttMessage = new MqttMessage(message.getBytes(StandardCharsets.UTF_8));
     mqttMessage.setQos(qos);
-    mqttClient.publish(topic, mqttMessage);
+    this.publish(topic, mqttMessage);
     log.debug("message was sent");
   }
 
@@ -55,6 +55,19 @@ public class MqttPublisher {
       log.debug("result data: {}", data);
       this.publish(topic, data, qos);
     }
+  }
+
+  private void publish(String topic, MqttMessage message){
+    Thread thread = new Thread() {
+      public void run() {
+        try {
+          mqttClient.publish(topic, message);
+        } catch (MqttException e) {
+          log.error(e.getMessage(), e);
+        }
+      }
+    };
+    thread.start();
   }
 
 

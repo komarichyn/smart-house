@@ -34,9 +34,8 @@ public class MqttCallback implements org.eclipse.paho.client.mqttv3.MqttCallback
     log.info("connect to mqtt broker");
     try {
       mqttClient.setCallback(this);
-      if(!mqttClient.isConnected()) {
+      if(!mqttClient.isConnected())
         mqttClient.connect(connectionOptions);
-      }
       mqttClient.subscribe("#");
       log.info("connection passed success");
     } catch (MqttException e) {
@@ -47,11 +46,18 @@ public class MqttCallback implements org.eclipse.paho.client.mqttv3.MqttCallback
   @Override
   public void connectionLost(Throwable cause) {
     log.warn("connection lost. try to reconnect");
-    this.connect();
+    try {
+      if (!mqttClient.isConnected()) {
+        mqttClient.reconnect();
+      }
+    } catch (MqttException e) {
+      log.error(e.getMessage(), e);
+    }
+//    this.connect();
   }
 
   @Override
-  public void messageArrived(String topic, MqttMessage message)  {
+  public void messageArrived(String topic, MqttMessage message) {
     // The message you get after you subscribe will be executed here
     log.info("Receive message subject : " + topic);
     log.info("receive messages Qos : " + message.getQos());
@@ -62,32 +68,6 @@ public class MqttCallback implements org.eclipse.paho.client.mqttv3.MqttCallback
       log.debug("handle topic name:{}, by handler: {}", topic, handler.getClass());
       handler.handle(topic, message);
     });
-
-//    if(DEFAULT_TOPIC.equals(topic)){
-//      ObjectMapper mapper = new ObjectMapper();
-//      IDevice device = mapper.readValue(message.getPayload(), DeviceDto.class);
-//      SensorDto sensorDto = sensorService.getSensor(device.getCode());
-//
-//      if(sensorDto == null){
-//        sensorDto = new SensorDto();
-//        sensorDto.setName(device.getCode());
-//        sensorDto.setIncome("device/" + device.getCode() + "/income");
-//        sensorDto.setOutcome("device/" + device.getCode() + "/outcome");
-//        sensorDto = sensorService.save(sensorDto);
-//      }
-//
-//      device.setSensor(sensorDto);
-//      SensorDto config = registrationService.registration(device);
-//      log.debug("registration data:{}", config);
-//
-////      //todo send configuration to client and subscribe to proper topic
-////      if(config != null) {
-////        String data = mapper.writeValueAsString(config);
-////        log.debug("result data: {}", data);
-////        mqttConfig.getMqttPushClient().subscribe(config.getOutcome(), 0);
-////        mqttConfig.getMqttPushClient().publish(0, false, config.getIncome(), data);
-////      }
-//    }
   }
 
   @Override
